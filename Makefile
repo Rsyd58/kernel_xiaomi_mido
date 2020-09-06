@@ -1662,3 +1662,5 @@ FORCE:
 # Declare the contents of the .PHONY variable as phony.  We keep that
 # information in a variable so we can use it in if_changed and friends.
 .PHONY: $(PHONY)
+
+KBUILD_CFLAGS += $(call cc-disable-warning, compound-token-split-by-space)
