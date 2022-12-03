@@ -394,6 +394,9 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Wno-format-security \
 		   -std=gnu89 $(call cc-option,-fno-PIE)
 
+# Avoid gcc-10 regression
+KBUILD_CFLAGS += --param=max-inline-insns-auto=1000
+
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__ $(call cc-option,-fno-PIE)
@@ -598,6 +601,8 @@ endif # $(dot-config)
 all: vmlinux
 
 ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += -Wno-compound-token-split-by-space
+KBUILD_CFLAGS += -Wno-asm-operand-widths
 ifneq ($(CROSS_COMPILE),)
 CLANG_TRIPLE	?= $(CROSS_COMPILE)
 CLANG_TARGET	:= --target=$(notdir $(CROSS_COMPILE:%-=%))
@@ -623,6 +628,9 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning,frame-address,)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, format-truncation)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
+KBUILD_CFLAGS += $(call cc-disable-warning, restrict)
+KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= $(call cc-option,-Oz,-Os)
