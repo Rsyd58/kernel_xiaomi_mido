@@ -5551,7 +5551,7 @@ static int vdd_restriction_reg_init(struct platform_device *pdev)
 			 * our first temp reading
 			 */
 			if (freq_table_get)
-				ret = vdd_restriction_apply_freq(&rails[i], 0);
+				ret = vdd_restriction_apply_freq(&rails[i], 1);
 			else
 				pr_info("Defer vdd rstr freq init.\n");
 		} else {
@@ -5575,7 +5575,7 @@ static int vdd_restriction_reg_init(struct platform_device *pdev)
 			 * Restrict votlage by default until we have made
 			 * our first temp reading
 			 */
-			ret = vdd_restriction_apply_voltage(&rails[i], 0);
+			ret = vdd_restriction_apply_voltage(&rails[i], 1);
 		}
 	}
 
@@ -6858,8 +6858,8 @@ static int probe_cc(struct device_node *node, struct msm_thermal_data *data,
 	int ret = 0;
 
 	if (num_possible_cpus() > 1) {
-		core_control_enabled = 1;
-		hotplug_enabled = 1;
+		core_control_enabled = 0;
+		hotplug_enabled = 0;
 	}
 
 	key = "qcom,core-limit-temp";
